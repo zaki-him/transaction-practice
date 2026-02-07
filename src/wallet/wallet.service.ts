@@ -5,12 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from 'src/accounts/accounts.entity';
+import { transaction } from 'src/transactions/transactions.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class WalletService {
   constructor(
     @InjectRepository(Account) private accountRepo: Repository<Account>,
+    @InjectRepository(transaction) private transactionRepo: Repository<transaction>,
   ) {}
 
   async transferFunds(
@@ -36,11 +38,27 @@ export class WalletService {
         );
       }
 
+      const withdrawal = manager.create(transaction, {
+        account_id: fromAccountId,
+        amount,
+        type: 'WITHDRAWL',
+      });
+      const deposit = manager.create(transaction, {
+        account_id: toAccountId,
+        amount,
+        type: 'DEPOSIT',
+      });
+      
       fromAccount.balance -= amount;
       toAccount.balance += amount;
 
+
+      await manager.save(withdrawal);
+      await manager.save(deposit);
       await manager.save(fromAccount);
       await manager.save(toAccount);
+
+      return { message: 'Transfer successful' };
     });
   }
 }
