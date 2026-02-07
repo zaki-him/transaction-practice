@@ -3,14 +3,14 @@ import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
 @Entity('account')
 export class Account {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id: string;
 
   @Column()
-  user_id: string
+  user_id: string;
 
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
-  balance: number
+  balance: number;
 
   @VersionColumn()
-  version: number
+  version: number;
 }

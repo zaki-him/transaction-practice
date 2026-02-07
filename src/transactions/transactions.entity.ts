@@ -1,19 +1,24 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('transaction')
 export class transaction {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id: string;
 
   @Column('uuid')
-  account_id: string
+  account_id: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number
+  amount: number;
 
   @Column()
-  type: 'WITHDRAWL' | 'DEPOSIT'
+  type: 'WITHDRAWL' | 'DEPOSIT';
 
   @CreateDateColumn()
-  created_at: Date
+  created_at: Date;
 }
